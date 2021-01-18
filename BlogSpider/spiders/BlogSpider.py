@@ -34,7 +34,8 @@ class BlogSpider(Spider):
     def parse_post(self, response):
         self.log(f'Parse response with method parse_post() from url:{response.url}')
         post_name = response.url.replace("https://blog.prokulski.science/index.php/", "").replace("/", "_")[:-1]
-        self.log(f'Extract fields [post_title, post_date, post_tags, post_tables_num, post_code_lines_num] from Post {post_name}')
+        self.log(f"Extract fields [post_title, post_date, post_tags, " +
+                 "post_tables_num, post_code_lines_num] from Post {post_name}")
         post_date = post_name[:10].replace("_", "-")
         post_title = post_name[11:]
         post_tags = response.css('.nv-tags-list > a::text').getall()
@@ -48,4 +49,4 @@ class BlogSpider(Spider):
             'post_tags': post_tags,
             'post_tables_num': post_tables_num,
             'post_code_lines_num': post_code_lines_num
-            }
+        }
