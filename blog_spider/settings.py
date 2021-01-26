@@ -9,6 +9,8 @@
 
 BOT_NAME = 'blog_spider'
 
+LOG_LEVEL = 'ERROR' #'DEBUG'
+
 SPIDER_MODULES = ['blog_spider.spiders']
 NEWSPIDER_MODULE = 'blog_spider.spiders'
 

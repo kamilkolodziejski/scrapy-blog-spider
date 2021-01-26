@@ -32,7 +32,7 @@ class BlogSpider(Spider):
         base_url = 'https://blog.prokulski.science/index.php/wp-json/nv/v1/posts/page/'
         if self.page_number_to_crawl is None:
             self.page_number_to_crawl = 9999
-        for i in range(int(self.page_number_to_crawl)):
+        for i in range(1, int(self.page_number_to_crawl)):
             url = f'{base_url}{i}'
             self.log(f'Create POST Request with url: {url}')
             yield Request(url=url, callback=self.parse, method='POST')
@@ -50,10 +50,11 @@ class BlogSpider(Spider):
             yield Request(url=url, callback=self.parse_post_page)
 
     def parse_post_page(self, response):
+        base_url = 'https://blog.prokulski.science/index.php/'
         self.log(f'Parse response with method parse_post() from url:{response.url}')
-        post_name = response.url.replace(response.request.url, "").replace("/", "_")[:-1]
+        post_name = response.url.replace(base_url, "").replace("/", "_")[:-1]
         self.log('Extract fields [post_title, post_date, post_tags, ' +
-                 f'"post_tables_num, post_code_lines_num] from Post {post_name}')
+                 f'post_tables_num, post_code_lines_num] from Post {post_name}')
 
         post_date = post_name[:10].replace("_", "-")
         post_title = post_name[11:]
@@ -65,7 +66,7 @@ class BlogSpider(Spider):
         post_code_lines_num = len(response.css('.crayon-code > .crayon-pre > .crayon-line'
                                                ).getall())
 
-        self.log(f'Return data for post "{post_name}"')
+        self.log(f'Return data for post "{post_title}"')
         yield {
             'post_title': post_title,
             'post_date': post_date,
